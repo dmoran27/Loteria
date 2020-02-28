@@ -14,8 +14,8 @@ class ProveedorController extends Controller
      */
     public function index()
     {
-        //
-        $proveedor = Proveedor::all();
+
+        $proveedor = Proveedor::select( 'id',  'tipodedocumento', 'nroidentificacion', 'razonsocial', 'telefono1', 'telefono2', 'direccion', 'email')->get();
         return response()->json([
             'success' => "Personas Proveedores Listadas",
             'content' => $proveedor
@@ -125,11 +125,21 @@ class ProveedorController extends Controller
      * @param  \App\Proveedor  $proveedor
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Proveedor $proveedor)
+    public function destroy($id)
     {
         //
-        $proveedor->delete();
-        $proveedor = Proveedor::all();
-        return response()->json($proveedor);
+    $proveedor = Proveedor::findOrFail($id);
+    $proveedor->delete();
+    $proveedor =Proveedor::all();
+      return response()->json([
+            'success' => "Proveedor eliminado",
+            'content' => $proveedor
+        ],200);
+    }
+
+     public function getProveedoresForDataTable(Request $request)
+    {
+        $query = Proveedor::all()->orderBy($request->column, $request->order)->paginate($request->per_page);
+ return response()->json($query);
     }
 }

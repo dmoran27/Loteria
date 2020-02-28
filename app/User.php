@@ -21,6 +21,7 @@ class User extends Authenticatable
     protected $table = 'users';
     protected $fillable = [
         'email', 
+        'tipo',
         'password',
         'direccion',
         'telefono1',
@@ -60,17 +61,17 @@ protected $dates = [
 
     public function empleado()
     {
-        return $this->hasOne(Empleado::class, 'id', 'empleado_id');
+        return $this->hasOne(Empleado::class, 'id', 'id');
     }
 
-     public function institucion()
+     public function Organizacion()
     {
-        return $this->hasOne(Institucion::class, 'id', 'institucion_id');
+        return $this->hasOne(Organizacion::class, 'id', 'id');
     }
 
      public function natural()
     {
-        return $this->hasOne(Natural::class, 'id', 'natural_id');
+        return $this->hasOne(Natural::class, 'id', 'id');
     }
      public function roles()
     {

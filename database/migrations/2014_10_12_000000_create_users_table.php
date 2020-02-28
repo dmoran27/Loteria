@@ -15,7 +15,7 @@ class CreateUsersTable extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('password');
+            $table->string('tipo');
             $table->string('telefono1');
             $table->string('telefono2')->nullable();
             $table->string('estado_id');
@@ -24,6 +24,7 @@ class CreateUsersTable extends Migration
             $table->text('direccion')->nullable();
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
+            $table->string('password');
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes(); //Nueva línea, para el borrado lógico

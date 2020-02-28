@@ -3,13 +3,14 @@ namespace App\Http\Controllers;
 use App\User;
 use App\Natural;
 use App\Organizacion;
+use App\Rol;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 
-class AuthController extends Controller
+class AuthPassportController extends Controller
 {
     /**
      * Create user
@@ -46,6 +47,7 @@ class AuthController extends Controller
         }
 
         $user = new User([ 
+            'tipo'=>'Natural',
             'email' => $request->email,
             'password' => bcrypt($request->password),
             'direccion' => $request->direccion,
@@ -105,6 +107,7 @@ class AuthController extends Controller
         }
 
         $user = new User([ 
+            'tipo'=>'Organizacion',
             'email' => $request->email,
             'password' => bcrypt($request->password),
             'direccion' => $request->direccion,
@@ -144,7 +147,7 @@ class AuthController extends Controller
      * @return [string] token_type
      * @return [string] expires_at
      */
-    public function signup(Request $request)
+    public function login(Request $request)
         {
       $request->validate([
             'email'       => 'required|string|email',
@@ -154,7 +157,7 @@ class AuthController extends Controller
         $credentials = request(['email', 'password']);
         if (!Auth::attempt($credentials)) {
             return response()->json([
-                'message' => 'Unauthorized'], 401);
+                'message' => 'Usuario Invalido'], 401);
         }
         $user = $request->user();
         $tokenResult = $user->createToken('Personal Access Token');
@@ -195,6 +198,29 @@ class AuthController extends Controller
      */
     public function user(Request $request)
     {
-        return response()->json($request->user());
+            $user = Auth::user();
+            $rol= $user->roles()->get();
+            if(Auth::user()->tipo=='Natural'){
+                $datos= $user->natural()->get();
+            }
+            if(Auth::user()->tipo=='Organizacion'){
+                $datos= $user->organizacion()->get();
+            }
+            if(Auth::user()->tipo=='Empleado'){
+                $datos= $user->empleado()->get();
+            }
+
+
+
+
+
+
+             return response()->json([
+            
+            'user' => $user,
+            'rol'=>$rol,
+            'datos'=>$datos,
+        ]);
+        
     }
 }
