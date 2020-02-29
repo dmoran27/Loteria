@@ -14,7 +14,9 @@ use Illuminate\Http\Request;
 */
 
 
-        
+        Route::group(['middleware' => ['cors']], function () {
+    //Rutas a las que se permitirá acceso
+
         Route::resource('citas', 'citaController', ['except' => ['edit', 'create']]);
         Route::resource('departamentos', 'departamentoController', ['except' => ['edit', 'create']]);
         Route::resource('disponibilidades', 'disponibilidadController', ['except' => ['edit', 'create']]);
@@ -55,3 +57,4 @@ Route::group(['prefix' => 'auth'], function () {
     });
 });
 
+});
